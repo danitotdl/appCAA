@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ppCAA</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e9ecef;
+            color: #343a40;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: transparent;            
+        }
+        .navbar-brand {
+            font-size: 1.25rem;
+            color: #ffffff;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .footer {
+            background-color: #191A23;
+            padding: 20px 0;
+            text-align: center;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+        .footer__content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer__copyright-text {
+            margin: 0;
+        }
+        .container-custom {
+            margin-top: 100px;
+            border: 2px solid #6c757d;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .modal-content {
+            background-color: #ffffff;
+        }
+        .modal-header {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #videoContainer {
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            max-width: 100%;
+            height: 350px;
+            border: none;
+            border-radius: 8px;
+        } 
+        .container_traduce {               
+            border-radius: 10px;    
+            padding: 3rem 1rem;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .result img {
+            width: 90px;
+            height: 90px;
+            margin: 5px;
+        }
+        
+        @media (max-width: 480px) {
+            .container_traduce {
+                padding: 10px;
+            }
+
+            .result img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <i class="fa-solid fa-backward"></i>&nbsp;Inicio 
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="container container-custom">
+        <h1 class="my-4" id="abc">Abecedario</h1>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#videoModal">Iniciar ABC</button>
+    </section>
+
+    <!-- Single Video Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">YouTube Video Player</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Video Player -->
+                    <div id="videoPlayer" class="video-container">
+                        <iframe id="currentVideo" src="https://www.youtube.com/embed/RKxKDRVpY0k?si=K6lrv4bjApZXn1nM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="previousVideo" onclick="changeVideo(-1)">Prev.</button>
+                    <button type="button" class="btn btn-primary" id="nextVideo" onclick="changeVideo(1)">Sig.</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="container container-custom" id="dic">
+        <h1>Diccionario Lengua de Señas Argentina</h1>
+        <input type="text" id="palabra" placeholder="Ingresa una palabra" oninput="mostrarVideo()">
+        <div id="videoContainer"></div>
+    </section>
+
+    <section class="container container-custom" id="name">
+        <div class="container_traduce">
+            <h1>Introduce tu nombre</h1>
+            <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí">
+            <button onclick="convertName()">Convertir</button>
+            <div id="result" class="result"></div>
+        </div>
+        
+    </section>
+
+    <section class="container container-custom" id="quiz">
+        <iframe src="https://h5p.org/h5p/embed/1498016" width="100%" height="713" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" title="Game video"></iframe>
+    </section>
+
+    <footer class="footer">
+        <section class="footer__content">
+            <div class="footer__copyright">
+                <p class="footer__copyright-text">&copy; @ppCAA - Derechos reservados.</p>
+            </div>
+        </section>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script>
+    <script>
+        const videoUrls = [
+            'https://www.youtube.com/embed/RKxKDRVpY0k?si=K6lrv4bjApZXn1nM',
+            'https://www.youtube.com/embed/DLg82Crlst0?si=rDhJpUSK1XTM7B7M',
+            'https://www.youtube.com/embed/W0iO9ISd-EY?si=IS2f3RcITe3H0KSr',
+            'https://www.youtube.com/embed/9uxenEM-45U?si=8G86GBZ5eJn8nGtd',
+            'https://www.youtube.com/embed/i104LCOfyM8?si=kI6cfl8IOlhoiVJC',
+            'https://www.youtube.com/embed/KK4f6c2V55I?si=JHgfsZMmOjBdx3Qr',
+            'https://www.youtube.com/embed/2TdKsi3qvI0?si=8v4pMGEiYu-bo0IT',
+            'https://www.youtube.com/embed/xNyY2P1DNjw?si=dUY-_QkaNBzL6Lxg',
+            'https://www.youtube.com/embed/lgpLK6hsS5Y?si=nsIsmV6Dmhixcwda',
+            'https://www.youtube.com/embed/-mtk71fxZsc?si=AjSM4Q7fvE3yczIX',
+            'https://www.youtube.com/embed/txMo2gA3BdI?si=hAHpNP6xXs0l02nt',
+            'https://www.youtube.com/embed/rFbH7uGpaAY?si=gbhMgbaR4GBbvDQx',
+            'https://www.youtube.com/embed/GRGNOVuFuY4?si=jQB-ton9MXtMsHGJ',
+            'https://www.youtube.com/embed/9M1p30gpm5Y?si=7H8bCLhJllxIowRk',
+            'https://www.youtube.com/embed/KQe8GfwecxA?si=ylIpvhEtjJ9S6wLJ',
+            'https://www.youtube.com/embed/-UsxX-fnSU8?si=qZiCm5TzgRoT_q1n',
+            'https://www.youtube.com/embed/SKHWBYueIPg?si=ajvYDMoAsTJ3DToJ',
+            'https://www.youtube.com/embed/aiMKHsUeNrU?si=CDG0BoQvD_CdYo3e',
+            'https://www.youtube.com/embed/FE2Mx177zzY?si=orNP-dHnOtnJLTxZ',
+            'https://www.youtube.com/embed/NleYw1X-iR4?si=GbNhrwaMbiOztHiT',
+            'https://www.youtube.com/embed/qlUzf3LKs_0?si=oUCUxWsga5EpLESw',
+            'https://www.youtube.com/embed/oxujbjJNvnc?si=mfEoxvdfovVRQYrI',
+            'https://www.youtube.com/embed/r7kHECHoogQ?si=fztV0BWfTgW3q4Mw',
+            'https://www.youtube.com/embed/rBOUIxLpP9k?si=U-y1FSJqBflh3mmn',
+            'https://www.youtube.com/embed/luKs3zvOMRs?si=rlQvcVmolZ7JnyAN',
+            'https://www.youtube.com/embed/irZn4MWH6do?si=I81XZqjYhPkTMZW-',
+            'https://www.youtube.com/embed/xaBXZgM2yM0?si=8LNW8UIB2bPBN2ux',
+        ];
+
+        let currentIndex = 0;
+
+        function changeVideo(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = videoUrls.length - 1;
+            } else if (currentIndex >= videoUrls.length) {
+                currentIndex = 0;
+            }
+            document.getElementById('currentVideo').src = videoUrls[currentIndex];
+        }
+
+        changeVideo(0);
+
+        $('#videoModal').on('hidden.bs.modal', function () {
+            var iframe = document.getElementById('currentVideo');
+            if (iframe) {
+                var src = iframe.src;
+                iframe.src = '';
+                iframe.src = src;
+            }
+        });
+
+        function mostrarVideo() {
+            const palabra = document.getElementById("palabra").value.toLowerCase();
+            const videoContainer = document.getElementById("videoContainer");
+        
+            // Diccionario de palabras y sus respectivos URLs de videos de YouTube
+            const diccionario = {
+                "hola": "https://www.youtube.com/embed/aalroJZpf34",
+                "permiso": "https://www.youtube.com/embed/CiTX5A7NydA",
+                "gracias": "https://www.youtube.com/embed/OVPLOYFhBMs",
+                "apellido": "https://www.youtube.com/embed/t30MXM0ujYk",
+                // Agregar más palabras y URLs según sea necesario
+            };
+        
+            // Verificar si la palabra ingresada tiene un video asociado
+            if (diccionario[palabra]) {
+                videoContainer.innerHTML = `<iframe src="${diccionario[palabra]}" allowfullscreen></iframe>`;
+            } else {
+                videoContainer.innerHTML = `<p>No se encontró un video para la palabra "${palabra}".</p>`;
+            }
+        }
+
+        function convertName() {
+            const name = document.getElementById('nameInput').value.toLowerCase();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            const baseURL = 'img/'; // Ruta a la carpeta de imágenes
+            for (let char of name) {
+            if (char >= 'a' && char <= 'z') {
+            const img = document.createElement('img');
+            img.src = `${baseURL}${char}.png`; // Asumiendo que las imágenes están nombradas como a.png, b.png, etc.
+            img.alt = char;
+            resultDiv.appendChild(img);
+             }
+           }
+        }
+    
+    </script>
+</body>
+</html>
